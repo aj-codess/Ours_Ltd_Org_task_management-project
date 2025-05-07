@@ -1,4 +1,5 @@
 import Admin from "./../model/adminModel.js";
+import Users from "./../model/userModel.js";
 import logService from "./../service/logService.js";
 
 const getAdmin=async(req,res)=>{
@@ -78,8 +79,46 @@ const deleteAdmin=async(req,res)=>{
 };
 
 
+
+const getUsers=async(req,res)=>{
+    try{
+
+        const users = await User.find().select({
+            password: 0,
+            email: 0,
+            phone: 0,
+        });
+
+        if(!users){
+            return res.status(404).json({status:"failed",message:"Error Getting Users"});
+        };
+
+        return res.status(200).json({status:"success",users});
+
+    } catch(error){
+        res.status(500).json({status:"failed",message:"Internal Server Error In Getting Users"});
+        console.log("Error getting users - ",error);
+    }
+};
+
+
+const createTask=async(req,res)=>{
+    try{
+
+        
+
+    } catch(error){
+        res.status(500).json({status:"failed",message:"Internal Server Error In Creating task"});
+        console.log("Error creating task - ",error);
+    }
+};
+
+
+
 export default {
     getAdmin,
     updateProfile,
-    deleteAdmin
+    deleteAdmin,
+    getUsers,
+    createTask
 }
