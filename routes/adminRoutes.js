@@ -3,6 +3,7 @@ import adminController from "./../controller/adminController.js";
 
 const adminRouter=express.Router();
 
+//gets admins profile
 adminRouter.get("/",(req,res)=>{
     userController.getUser(req,res);
 });

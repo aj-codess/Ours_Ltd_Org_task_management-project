@@ -57,6 +57,15 @@ const deleteAccount=async(req,res)=>{
             return res.status(406).json({status:"failed",message:"Password Unmatched. Failed Deleting User."})
         };
 
+        const isDeleted=await User.findOneAndDelete(
+            {id:userId},
+            {new:true}
+        );
+
+        if(isDeleted){
+            return res.status(200).json({status:"Success",message:"User Account Deleted Successfully"});
+        };
+
     } catch(error){
         res.status(500).json({status:"failed",message:"Internal Server Error In Deleting User Account"});
         console.log("Error Deleting User - ",error);
