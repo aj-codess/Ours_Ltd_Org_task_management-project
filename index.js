@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import express from 'express';
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import db from "./config/db_config.js";
+import router from "./routes/index.js";
 
 const app=express();
 
@@ -9,10 +11,14 @@ const PORT=process.env.PORT || 3000;
 
 dotenv.config();
 
+db.connectDB();
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
+
+app.use("/api/v1",router);
 
 const server=app.listen(PORT, () => {
 
