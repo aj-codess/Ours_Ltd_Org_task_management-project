@@ -1,5 +1,5 @@
 import Admin from "./../model/adminModel.js";
-import Users from "./../model/userModel.js";
+import User from "./../model/userModel.js";
 import logService from "./../service/logService.js";
 
 const getAdmin=async(req,res)=>{
@@ -105,7 +105,23 @@ const getUsers=async(req,res)=>{
 const createTask=async(req,res)=>{
     try{
 
-        
+        const adminId=req.user;
+
+        const {title,description,dueDate,status}=req.body;
+
+        const admin=await Admin.findOneAndUpdate(
+            {id:adminId},
+            {
+
+            },
+            {new:true}
+        );
+
+        if(admin){
+            return res.status(201).json({status:"Success",message:"Task Created Successfully"});
+        };
+
+        return res.json({status:"failed",message:"Failed Creating task"});
 
     } catch(error){
         res.status(500).json({status:"failed",message:"Internal Server Error In Creating task"});

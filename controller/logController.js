@@ -1,7 +1,11 @@
+import User from "./../model/userModel.js";
+import utility from "./../service/utility.js";
 
 const newUser=async(req,res)=>{
     try{
+        const {email,password,phone,username}=req.body;
 
+        // const newId
     } catch(error){
         res.status(500).json({status:"Failed",message:"Internal Server Error"});
         console.log(
