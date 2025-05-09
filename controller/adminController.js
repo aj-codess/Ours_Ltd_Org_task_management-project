@@ -1,12 +1,12 @@
 import Admin from "./../model/adminModel.js";
 import User from "./../model/userModel.js";
-import logService from "./../service/logService.js";
+import utility from "../service/utility.js";
 
 const getAdmin=async(req,res)=>{
     try{
 
-        const userId=req.user;
-        const adminObj=await Admin.findOne({id:userId});
+        const adminId=req.user;
+        const adminObj=await Admin.findOne({id:adminId});
 
         if(!adminObj){
             return res.status(404).json({status:"Failed",message:"Admin Account Not Found"});
@@ -24,10 +24,10 @@ const getAdmin=async(req,res)=>{
 const updateProfile=async(req,res)=>{
     try{
 
-        const userId=req.user;
+        const adminId=req.user;
         const {adminName,email,phone}=req.body;
-        const adminObj=findOneAndUpdate(
-            {id:userId},
+        const adminObj=await Admin.findOneAndUpdate(
+            {id:adminId},
         {
             $set:{
                 adminName,email,phone
@@ -51,9 +51,9 @@ const updateProfile=async(req,res)=>{
 const deleteAdmin=async(req,res)=>{
     try{
 
-        const userId=req.user;
+        const adminId=req.user;
         const {password}=req.body;
-        const adminObj=await Admin.findOne({id:userId});
+        const adminObj=await Admin.findOne({id:adminId});
 
         if(!adminObj){
             return res.status(404).json({status:"Failed",message:"Admin not Found"});
@@ -85,7 +85,6 @@ const getUsers=async(req,res)=>{
 
         const users = await User.find().select({
             password: 0,
-            email: 0,
             phone: 0,
         });
 
@@ -112,7 +111,13 @@ const createTask=async(req,res)=>{
         const admin=await Admin.findOneAndUpdate(
             {id:adminId},
             {
-
+                $push:{
+                    id:utility.genId(),
+                    title,
+                    description,
+                    dueDate:new Date(dueDate),
+                    status
+                }
             },
             {new:true}
         );
@@ -131,10 +136,86 @@ const createTask=async(req,res)=>{
 
 
 
+const deleteTask=async(req,res)=>{
+    try{
+        const adminId=req.user;
+        const {taskId}=req.body;
+
+        const adminObj=await Admin.findOneAndUpdate(
+            {id:adminId},
+            {
+                $pull:{
+                    task:{id:taskId}
+                }
+            },
+            {new:true}
+        );
+
+        if(adminObj){
+            return res.status(200).json({status:"Success",message:"Task Deleted Successfully"});
+        }
+
+        return res.json({status:"Failed",message:"Task wasnt Deleted"});
+
+    } catch(error){
+        res.status(500).json({status:"failed",message:"Internal Server Error In Deleting task"});
+        console.log("Error deleting task - ",error);
+    }
+}
+
+
+
+const getTask=async(req,res)=>{
+    try{
+
+        const adminId=req.user;
+
+        const obj=await Admin.findOne({id:adminId});
+
+        if(obj){
+            return res.status(200).json({status:"Success",data:obj.task});
+        }else{
+            return res.status(404).json({status:"Failed",message:"Data Not Found"});
+        };
+
+    } catch(error){
+        res.status(500).json({status:"failed",message:"Internal Server Error In Getting task"});
+        console.log("Error getting task - ",error);
+    }
+}
+
+
+const assignToTask=async(req,res)=>{
+    try{
+
+        const adminId=req.user;
+        const {taskId,userId}=req.body;
+
+        const adminObj=await Admin.findOneAndUpdate(
+            {id:adminId,"task.id":taskId},
+            {
+                $addToSet:{
+                    "task.$.assignedTo":userId,
+                }
+            },
+            {new:true}
+        );
+
+    } catch(error){
+        res.status(500).json({status:"Failed",message:"Internal Server Error in Assigning Task"});
+        console.log("Error In the Assignment of task");
+    }
+}
+
+
+
 export default {
     getAdmin,
     updateProfile,
     deleteAdmin,
     getUsers,
-    createTask
+    createTask,
+    deleteTask,
+    getTask,
+    assignToTask
 }

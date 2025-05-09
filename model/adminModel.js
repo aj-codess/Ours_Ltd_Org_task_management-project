@@ -3,6 +3,11 @@ import bcrypt from "bcrypt";
 
 
 const taskSchema = new mongoose.Schema({
+    id:{
+        type: String,
+        required: true,
+        unique: true,
+    },
     title: {
       type: String,
       required: true,
@@ -10,6 +15,7 @@ const taskSchema = new mongoose.Schema({
     },
     description: {
       type: String,
+      required:true
     },
     dueDate: {
       type: Date,

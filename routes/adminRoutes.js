@@ -24,4 +24,16 @@ adminRouter.post("/createTask",(req,res)=>{
     adminController.createTask(req,res);
 });
 
+adminRouter.delete("/deleteTask",(req,res)=>{
+    adminController.deleteTask(req,res);
+});
+
+adminRouter.get("/getTask",(req,res)=>{
+    adminController.getTask(req,res);
+});
+
+adminRoutes.post("/assignToTask",(req,res)=>{
+    adminController.assignToTask(req,res);
+});
+
 export default adminRouter;

@@ -1,4 +1,5 @@
 import User from "./../model/userModel.js";
+import Admin from "./../model/adminModel.js";
 import logService from "../service/logService.js";
 
 const getUser=async(req,res)=>{
@@ -73,8 +74,23 @@ const deleteAccount=async(req,res)=>{
 };
 
 
+
+const getTask=async(req,res)=>{
+    try{
+        const userId=req.user;
+
+        
+
+    } catch(error){
+        res.status(404).json({status:"Failed",message:"Internal Server Error in Getting task"});
+        console.log("Error Getting Task - ",error);
+    }
+};
+
+
 export default {
     getUser,
     updateProfile,
-    deleteAccount
+    deleteAccount,
+    getTask
 }
