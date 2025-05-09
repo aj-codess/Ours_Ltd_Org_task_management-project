@@ -36,4 +36,8 @@ adminRoutes.post("/assignToTask",(req,res)=>{
     adminController.assignToTask(req,res);
 });
 
+adminRouter.put("/removeUserFromTask",(req,res)=>{
+    adminController.removeUser(req,res);
+});
+
 export default adminRouter;

@@ -15,8 +15,12 @@ userRouter.delete("/",(req,res)=>{
     userController.deleteAccount(req,res);
 });
 
-userRoutes.get("/getTask",(req,res)=>{
+userRouter.get("/getTask",(req,res)=>{
+    userController.getTask(req,res);
+});
 
+userRouter.get("/getAssignedTask",(req,res)=>{
+    userController.getAssignedTask(req,res);
 });
 
 export default userRouter;

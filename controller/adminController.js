@@ -201,9 +201,44 @@ const assignToTask=async(req,res)=>{
             {new:true}
         );
 
+        if(adminObj){
+            return res.status(200).json({status:"success",isAssigned:true});
+        }
+
+        return res.json({status:"Failed",isAssigned:false});
+
     } catch(error){
         res.status(500).json({status:"Failed",message:"Internal Server Error in Assigning Task"});
         console.log("Error In the Assignment of task");
+    }
+}
+
+
+const removeUser=async(req,res)=>{
+    try{
+
+        const adminId=req.user;
+        const {taskId,userId}=req.body;
+
+        const taskObj=await Admin.findOneAndUpdate(
+            {id:adminId,"task.id":taskId},
+            {
+                $pull:{
+                    "task.$.assignedTo":userId
+                }
+            },
+            {new:true}
+        );
+
+        if(taskObj){
+            return res.status(200).json({status:"Success",isRemoves:true});
+        };
+
+        return res.json({status:"Failed",isRemoved:false});
+
+    } catch(error){
+        res.status(500).json({status:"Failed",message:"Internal Server Error in removing User From Task"});
+        console.log("Error Removing User From task");
     }
 }
 
@@ -217,5 +252,6 @@ export default {
     createTask,
     deleteTask,
     getTask,
-    assignToTask
+    assignToTask,
+    removeUser
 }

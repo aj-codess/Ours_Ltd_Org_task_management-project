@@ -77,20 +77,62 @@ const deleteAccount=async(req,res)=>{
 
 const getTask=async(req,res)=>{
     try{
-        const userId=req.user;
 
-        
+        const taskObj=await Admin.find().select({
+            id:0,
+            password:0,
+            email:0,
+            phone:0
+        });
+
+        if(taskObj){
+            return res.status(200).json({status:"Success",adminName:taskObj.adminName,task:taskObj.task});
+        };
+
+        return res.json({status:"Failed",message:"No Task Found"});
 
     } catch(error){
-        res.status(404).json({status:"Failed",message:"Internal Server Error in Getting task"});
+        res.status(500).json({status:"Failed",message:"Internal Server Error in Getting task"});
         console.log("Error Getting Task - ",error);
     }
 };
 
 
+const getAssignedTask=async(req,res)=>{
+    try{
+
+        const userId=req.user;
+
+        const tasks = await Admin.aggregate([
+            { $unwind: "$task" },
+            { $match: { "task.assignedTo": userId } },
+            {
+              $project: {
+                id: "$task.id",
+                title: "$task.title",
+                description: "$task.description",
+                dueDate: "$task.dueDate",
+                status: "$task.status",
+              },
+            },
+          ]);
+      
+          if (tasks.length > 0) {
+            return res.json({ status: "Success", tasks });
+          }
+      
+          return res.json({ status: "Failed", message: "No tasks found" });
+
+    } catch(error){
+        res.status(500).json({status:"Failed",message:"Internal Server Error in Getting Assigned Task"});
+        console.log("Error Getting Users Assigned Task - ",error);
+    }
+};
+
 export default {
     getUser,
     updateProfile,
     deleteAccount,
-    getTask
+    getTask,
+    getAssignedTask
 }
