@@ -32,7 +32,7 @@ adminRouter.get("/getTask",(req,res)=>{
     adminController.getTask(req,res);
 });
 
-adminRoutes.post("/assignToTask",(req,res)=>{
+adminRouter.post("/assignToTask",(req,res)=>{
     adminController.assignToTask(req,res);
 });
 

@@ -63,7 +63,7 @@ auth.use(async(req,res,next)=>{
                 req.user = decoded.id;
                 
                 if(rateLimiter.isAllowed(req.user)){
-                    return next();
+                     next();
                 } else{
                     return res.status(429).json({status:"Failed",message:"Too Many Request"});
                 };
