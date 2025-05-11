@@ -55,7 +55,7 @@ auth.use(async(req,res,next)=>{
         const tokenFromCookie = req.cookies?.token;
 
         const token = tokenFromHeader || tokenFromCookie;
-
+console.log(token);
         if(token){
             const decoded = await logServices.verifyToken(token);
 

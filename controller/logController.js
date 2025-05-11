@@ -7,6 +7,7 @@ const cookieOptions = {
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     httpOnly: true,
     sameSite: "strict",
+    secure:false
   };
 
 const newUser=async(req,res)=>{
@@ -33,8 +34,8 @@ const newUser=async(req,res)=>{
 
             const token = await logServices.signToken(user.id);
         
-            res.cookie('token', token, cookieOptions);
-        
+            res.cookie('authToken', token, cookieOptions);
+            console.log("user id is -",user.id);
                     return res.status(200).json({
                         username: user.username,
                         message: 'User Created Successfully',
@@ -68,7 +69,7 @@ const oldUser=async(req,res)=>{
   
         const token = await logServices.signToken(userObj.id);
         
-        res.cookie("token", token, cookieOptions);
+        res.cookie("authToken", token, cookieOptions);
 
         return res.status(200).json({status:"Success",isLoggedIn:true})
 
@@ -103,7 +104,7 @@ const newAdmin=async(req,res)=>{
         if(adminObj){
             const token = await logServices.signToken(adminObj.id);
         
-            res.cookie('token', token, cookieOptions);
+            res.cookie('authToken', token, cookieOptions);
         
                     return res.status(200).json({
                         username: adminObj.adminName,
@@ -138,7 +139,7 @@ const oldAdmin=async(req,res)=>{
 
         const token = await logServices.signToken(adminObj.id);
         
-        res.cookie("token", token, cookieOptions);
+        res.cookie("authToken", token, cookieOptions);
 
         return res.status(401).json({status:"Success",isLoggedIn:true});
 

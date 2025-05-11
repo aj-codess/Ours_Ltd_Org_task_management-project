@@ -39,7 +39,7 @@ const verifyToken = async (token) => {
       jwt.verify(
         token,
         publicKey,
-        { algorithm: 'RS256' },
+        { algorithms: ['RS256'] },
         (err, decoded) => {
           if (err) {
             console.log("Token recieved but verification Error - ",err.message);
