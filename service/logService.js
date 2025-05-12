@@ -65,7 +65,7 @@ const verifyToken = async (token) => {
       jwt.verify(
         token,
         publicKey,
-        { algorithms: ['RS256'] },
+        { algorithms: ['RS256']},
         (err, decoded) => {
           if (err) {
             reject(err);
