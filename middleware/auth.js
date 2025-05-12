@@ -52,10 +52,10 @@ auth.use(async(req,res,next)=>{
 
         const tokenFromHeader = authHeader && authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
 
-        const tokenFromCookie = req.cookies?.token;
+        const tokenFromCookie = req.cookies?.authToken;
 
         const token = tokenFromHeader || tokenFromCookie;
-console.log(token);
+        
         if(token){
             const decoded = await logServices.verifyToken(token);
 
@@ -63,7 +63,7 @@ console.log(token);
                 req.user = decoded.id;
                 
                 if(rateLimiter.isAllowed(req.user)){
-                     next();
+                  return next();
                 } else{
                     return res.status(429).json({status:"Failed",message:"Too Many Request"});
                 };

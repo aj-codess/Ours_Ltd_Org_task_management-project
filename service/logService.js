@@ -1,16 +1,42 @@
 import bcrypt from 'bcrypt';
+import fs from "fs";
 import jwt from 'jsonwebtoken';
 import * as crypto from "crypto";
 
 const saltRounds=10;
 
 
-const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
-    modulusLength: 2048,
-    publicKeyEncoding: { type: "spki", format: "pem" },
-    privateKeyEncoding: { type: "pkcs8", format: "pem" },
-  });
+  const writePublicPrivate=async()=>{
+    try{
 
+      const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+        modulusLength: 2048,
+        publicKeyEncoding: { type: "spki", format: "pem" },
+        privateKeyEncoding: { type: "pkcs8", format: "pem" },
+      });
+
+      fs.writeFileSync(`./assets/keys/public.pem`, publicKey);
+      fs.writeFileSync(`./assets/keys/private.pem`, privateKey);
+    } catch(error){
+      console.log("Error Writing private and public key to File - ",error);
+      process.exit(1);
+    }
+  };
+
+
+  let publicKey;
+  let privateKey;
+
+  const loadKeyToMemory=async()=>{
+    try{
+      privateKey = fs.readFileSync('./assets/keys/private.pem', 'utf8');
+      publicKey = fs.readFileSync('./assets/keys/public.pem', 'utf8');
+    } catch(error){
+      console.log("Error Loading Persistent Key to Memory - ",error);
+      process.exit(1);
+    }
+  };
+  
 
 
   const signToken = async (id) => {
@@ -42,7 +68,6 @@ const verifyToken = async (token) => {
         { algorithms: ['RS256'] },
         (err, decoded) => {
           if (err) {
-            console.log("Token recieved but verification Error - ",err.message);
             reject(err);
           } else {
             resolve(decoded);
@@ -76,5 +101,7 @@ const verifyToken = async (token) => {
   export default {
     verifyToken,
     signToken,
-    passHash
+    passHash,
+    writePublicPrivate,
+    loadKeyToMemory
   }

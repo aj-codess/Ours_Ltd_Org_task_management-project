@@ -33,9 +33,9 @@ const newUser=async(req,res)=>{
         if (user) {
 
             const token = await logServices.signToken(user.id);
-        
+
             res.cookie('authToken', token, cookieOptions);
-            console.log("user id is -",user.id);
+
                     return res.status(200).json({
                         username: user.username,
                         message: 'User Created Successfully',
