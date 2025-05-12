@@ -5,7 +5,7 @@ import logService from "../service/logService.js";
 const getUser=async(req,res)=>{
     try{
         const userId=req.user;
-        const user = await User.findOne({id:userId}).select("-password");
+        const user = await User.findOne({id:userId}).select("-password -_id -__v -id -createdAt -updatedAt");
 
         if(!user){
             return res.status(404).json({status:"failed",message:"User not Found"});
