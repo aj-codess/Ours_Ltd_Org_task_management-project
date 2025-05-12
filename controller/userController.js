@@ -14,7 +14,7 @@ const getUser=async(req,res)=>{
         return res.status(200).json({status:"success",user});
 
     } catch(error){
-        return res.status(500).json({status:"failed",message:"Internal Server Error In getting User"});
+        res.status(500).json({status:"failed",message:"Internal Server Error In getting User"});
         console.log("Error Getting User - ",error);
     }
 };
@@ -39,7 +39,7 @@ const updateProfile=async(req,res)=>{
         }
 
     } catch(error){
-        return res.status(500).json({status:"failed",message:"Internal Server Error In updating User Profile"});
+        res.status(500).json({status:"failed",message:"Internal Server Error In updating User Profile"});
         console.log("Error updating User - ",error);
     }
 };

@@ -39,7 +39,7 @@ const updateProfile=async(req,res)=>{
             return res.status(200).json({status:"success",message:"data Stored Successfully"})
         };
 
-        return res.status()
+        return res.json({status:"Failed",message:"Update failed Successfully"});
 
     } catch(error){
         res.status(500).json({status:"failed",message:"Internal Server Error In updating Admin Profile"});
@@ -71,6 +71,8 @@ const deleteAdmin=async(req,res)=>{
         if(isDeleted){
             return res.status(200).json({status:"Success",message:"Admin Account Deleted Successfully"});
         };
+
+        return res.json({status:"Failed",message:"Failed Deleting admin Account"});
 
     } catch(error){
         res.status(500).json({status:"failed",message:"Internal Server Error In Deleting Admin Account"});

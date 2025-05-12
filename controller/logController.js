@@ -34,7 +34,7 @@ const newUser=async(req,res)=>{
 
             const token = await logServices.signToken(user.id);
 
-            res.cookie('authToken', token, cookieOptions);
+            res.cookie("authToken", token, cookieOptions);
 
                     return res.status(200).json({
                         username: user.username,
@@ -42,7 +42,7 @@ const newUser=async(req,res)=>{
                     });
         
           } else {
-            res.status(400).json({ error: "User not created" });
+            return res.status(400).json({ error: "User not created" });
           };
 
     } catch(error){
@@ -112,7 +112,7 @@ const newAdmin=async(req,res)=>{
                     });
         
           } else {
-            res.status(400).json({status:"Failed",message: "Admin not created" });
+            return res.status(400).json({status:"Failed",message: "Admin not created" });
           };
 
     } catch(error){
